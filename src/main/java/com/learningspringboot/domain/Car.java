@@ -1,32 +1,27 @@
 package com.learningspringboot.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
 @AllArgsConstructor /* This injectable will create a constructor*/
 public class Car {
 
+  private Long id;
   private String name;
   private String color;
   private Integer power;
 
-  
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
-  public String getColor() {
-    return color;
-  }
-  public void setColor(String color) {
-    this.color = color;
-  }
-  public Integer getPower() {
-    return power;
-  }
-  public void setPower(Integer power) {
-    this.power = power;
-  }
+/**
+ * 
+ * This class represent with have in the Database
+ * 
+ * This project is using Lombok to generate the method and constructors for the app
+ * in the moment of compiler
+ * 
+ * @Data - responsible to generated the Getters, Setters, equal and hashcode 
+ * @AllArgsConstructor - responsible to generated the constructor
+ * 
+ */
   
 }

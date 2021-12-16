@@ -14,7 +14,7 @@
 	<name>learning-spring-boot</name>
 	<description>This application content all knowledge about Spring-Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
