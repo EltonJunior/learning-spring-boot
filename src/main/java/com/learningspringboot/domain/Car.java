@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor /* This injectable will create a constructor*/
 @NoArgsConstructor
 @Entity
+@Builder
 public class Car {
 
   @Id
@@ -56,6 +58,8 @@ public class Car {
  * 
  * it also need to implement a @Id and a @GeneratedValue(strategy = GenerationType.IDENTITY) 
  * this implementation came from javax.persistence
+ * 
+ * the Inject @Builder was include in this context to be used in the method that call it.
  * 
  */
   

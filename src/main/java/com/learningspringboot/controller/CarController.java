@@ -3,6 +3,8 @@ package com.learningspringboot.controller;
 import java.util.List;
 
 import com.learningspringboot.domain.Car;
+import com.learningspringboot.requests.CarPostRequestBody;
+import com.learningspringboot.requests.CarPutRequestBody;
 import com.learningspringboot.service.CarService;
 
 import org.springframework.http.HttpStatus;
@@ -41,12 +43,12 @@ public class CarController {
   @GetMapping(path = "/{id}")
   public ResponseEntity<Car> findById(@PathVariable long id){
     log.info("The GetMapping is works!");
-    return ResponseEntity.ok(carService.findById(id)) ;
+    return ResponseEntity.ok(carService.findByIdOrThrowBadRequestException(id)) ;
   }
 
   @PostMapping()
-  public ResponseEntity<Car> save(@RequestBody Car car){
-    return new ResponseEntity<>( carService.save(car), HttpStatus.CREATED);
+  public ResponseEntity<Car> save(@RequestBody CarPostRequestBody carPostRequestBody){
+    return new ResponseEntity<>( carService.save(carPostRequestBody), HttpStatus.CREATED);
   }
 
   @DeleteMapping(path = "/{id}")
@@ -56,8 +58,8 @@ public class CarController {
   }
 
   @PutMapping()
-  public ResponseEntity<Car> replace(@RequestBody Car car){
-    carService.replace(car);
+  public ResponseEntity<Car> replace(@RequestBody CarPutRequestBody carPutRequestBody){
+    carService.replace(carPutRequestBody);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
