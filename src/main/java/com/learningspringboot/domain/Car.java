@@ -1,14 +1,24 @@
 package com.learningspringboot.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor /* This injectable will create a constructor*/
+@NoArgsConstructor
+@Entity
 public class Car {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY) 
   private Long id;
 
   @JsonProperty("name")
@@ -40,6 +50,12 @@ public class Car {
  * 
  * it means that when it was request a name_of_car object it necessary only pass the "name" 
  * as a parameter. 
+ * 
+ * when working with database, its necessary to modify the object. 
+ * the object became a @Entity and it needs @NoArgsConstructor
+ * 
+ * it also need to implement a @Id and a @GeneratedValue(strategy = GenerationType.IDENTITY) 
+ * this implementation came from javax.persistence
  * 
  */
   
