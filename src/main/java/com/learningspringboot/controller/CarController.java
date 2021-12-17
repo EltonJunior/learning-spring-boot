@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +40,11 @@ public class CarController {
   public ResponseEntity<Car> findById(@PathVariable long id){
     log.info("The GetMapping is works!");
     return ResponseEntity.ok(carService.findById(id)) ;
+  }
+
+  @PostMapping()
+  public ResponseEntity<Car> save(@RequestBody Car car){
+    return new ResponseEntity<>( carService.save(car), HttpStatus.CREATED);
   }
 
 }
@@ -70,5 +77,13 @@ public class CarController {
  *   return ResponseEntity.ok(carService.listAll()) ;
  * }
  * 
+ * 
+ * when it was made a Request, if it has more than one @GetMapping() without 
+ * specification, like "/{id}", it will return a error when compile. this behavior 
+ * is the same on @PostMapping.  
+ * 
+ * On the Method @PostMapping, it is necessary pass as argument of request the BODY,
+ * to do that it uses @RequestBody with the type of Method
+ *  
  * 
  */

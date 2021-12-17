@@ -1,6 +1,8 @@
 package com.learningspringboot.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.learningspringboot.domain.Car;
 
@@ -23,12 +25,18 @@ public class CarService {
 
   /**
    * provide the list of vehicle to test the application.
+   * 
+   * to make change on the list, it was change to static.
    */
-  private List<Car> car = List.of(
-    new Car(1L,"Volkswagen","White",220),
-    new Car(2L,"Fiat","Red",135),
-    new Car(3L,"Renault","Blue",200)
-  );
+  private static List<Car> cars; 
+
+  static{
+      cars = new ArrayList<>(List.of(
+      new Car(1L,"Volkswagen","White",220),
+      new Car(2L,"Fiat","Red",135),
+      new Car(3L,"Renault","Blue",200)
+    ));
+  }
 
   /**
    * 
@@ -39,7 +47,7 @@ public class CarService {
    */
   public List<Car> listAll(){
     //private final carService CarService;
-    return car;
+    return cars;
   }
 
   /**
@@ -54,10 +62,23 @@ public class CarService {
    */
   public Car findById(long id){
     //private final carService CarService;
-    return car.stream()
+    return cars.stream()
     .filter(car -> car.getId().equals(id))
     .findFirst()
     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car not found"));
+  }
+
+  /**
+   * @apiNote to test the application, it was implemented the generate id, as database does.
+   * car.setId(ThreadLocalRandom.current().nextLong(3,10000)); this function generated ids 
+   * from 3 to 100000
+   * @param car
+   * @return return a create item.
+   */
+  public Car save(Car car) {
+    car.setId(ThreadLocalRandom.current().nextLong(3,10000));
+    cars.add(car);
+    return car;
   }
   
 }
