@@ -5,7 +5,10 @@ import java.util.List;
 import com.learningspringboot.domain.Car;
 import com.learningspringboot.service.CarService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +29,46 @@ public class CarController {
   private final CarService carService;
 
   @GetMapping()
-  public List<Car> list(){
+  public ResponseEntity<List<Car>> list(){
     log.info("The GetMapping is works!");
-    return carService.listAll();
+    return ResponseEntity.ok(carService.listAll()) ;
   }
+
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<Car> findById(@PathVariable long id){
+    log.info("The GetMapping is works!");
+    return ResponseEntity.ok(carService.findById(id)) ;
+  }
+
 }
+
+
+/**
+ * As a good practical, this method get implemented below, 
+ * return information as a Json list only. 
+ * @GetMapping()
+ * public List<Car> list(){
+ *   log.info("The GetMapping is works!");
+ *   return carService.listAll();
+ * }
+ * We should return together the status of request, to it, it uses 
+ * ResponseEntity. 
+ * 
+ * Is there 2 way to do it so.
+ * 
+ * 1 - 
+ * @GetMapping()
+ * public ResponseEntity<List<Car>> list(){
+ *   log.info("The GetMapping is works!");
+ *   return new ResponseEntity<>(carService.listAll(),HttpStatus.OK) ;
+ * }
+ * 
+ * 2 - 
+ *  * @GetMapping()
+ * public ResponseEntity<List<Car>> list(){
+ *   log.info("The GetMapping is works!");
+ *   return ResponseEntity.ok(carService.listAll()) ;
+ * }
+ * 
+ * 
+ */
