@@ -7,9 +7,11 @@ import com.learningspringboot.service.CarService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,18 @@ public class CarController {
   @PostMapping()
   public ResponseEntity<Car> save(@RequestBody Car car){
     return new ResponseEntity<>( carService.save(car), HttpStatus.CREATED);
+  }
+
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<Car> delete(@PathVariable long id){
+    carService.delete(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @PutMapping()
+  public ResponseEntity<Car> replace(@RequestBody Car car){
+    carService.replace(car);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
 }
@@ -85,5 +99,11 @@ public class CarController {
  * On the Method @PostMapping, it is necessary pass as argument of request the BODY,
  * to do that it uses @RequestBody with the type of Method
  *  
+ * 
+ * As a @GetMapping when it return only one item, it receive a "/{id}", the @DeleteMapping
+ * works as well.
+ * 
+ * One analogic that it can be done is when it does a @PutMapping, it is change all interred 
+ * object, it is used a function replace()
  * 
  */

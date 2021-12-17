@@ -80,5 +80,23 @@ public class CarService {
     cars.add(car);
     return car;
   }
+
+  /**
+   * When it receive a DELETE request, it uses findById to search the object,
+   * if object is found the function remove will remove it.
+   * if it was request the same object, the findById will search, and if it was not
+   * find it retorn a BAD_REQUEST. 
+   * 
+   * @param id
+   */
+  public void delete(long id) {
+    cars.remove(findById(id));
+  }
+
+  public void replace(Car car) {
+    delete(car.getId());
+    cars.add(car);
+  }
+  
   
 }
