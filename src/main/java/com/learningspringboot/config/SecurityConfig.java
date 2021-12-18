@@ -1,6 +1,7 @@
 package com.learningspringboot.config;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -8,24 +9,31 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-import lombok.extern.log4j.Log4j2;
-
 @EnableWebSecurity
-@Log4j2
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   /**
    * this Method will content the password, as good practical its will
    * have the strong password, use PasswordEncoder
+   * 
+   * when it wanna to use the ROLES, the Spring has the Inject 
+   * @EnableGlobalMethodSecurity that will use the roles attachment to 
+   * with user and distribute to entire application, the responsible to it is the 
+   * prePostEnabled that as default it is false.
+   * 
    */
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     PasswordEncoder passwordEncoder =  PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    log.info("PasswordEncoder: {}", passwordEncoder.encode("test"));
     auth.inMemoryAuthentication()
-    .withUser("USERNAME")
+    .withUser("USERNAME1")
     .password(passwordEncoder.encode("PASSWORD"))
-    .roles("ROLES");
+    .roles("ADMIN")
+    .and()
+    .withUser("USERNAME2")
+    .password(passwordEncoder.encode("PASSWORD"))
+    .roles("USER");
   }
 
   /**
@@ -34,16 +42,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    * 
    * the use of withHttpOnlyFalse() will force the Front-end has the same Cookie
    * when it was perform the @PostRequest it shall pass the Cookie also.
+   * 
+   * in the first @GetRequest it expected the USER and PASSWORD, after authentication
+   * it will be generated a TOKEN, for @PostRequest it expected that TOKEN in the 
+   * Header of REQUEST
+   * 
+   * In the Header: 
+   * Key: X-XSRF-TOKEN 
+   * Value: NUMBER_TOKEN_GENERATED
    */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-    .and()
-    .authorizeRequests()
-    .anyRequest()
-    .authenticated()
-    .and()
-    .httpBasic();
+    /**
+     * This part of code should be used when it has the deploy of application
+     * http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+     * .and()
+     * .authorizeRequests()
+     * .anyRequest()
+     * .authenticated()
+     * .and()
+     * .httpBasic();
+     */
+    http.csrf()
+      .disable()//.disable() or .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())    
+      .authorizeRequests()
+      .anyRequest()
+      .authenticated()
+      .and()
+      .httpBasic();    
+    
   }
   
 }

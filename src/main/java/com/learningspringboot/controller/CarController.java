@@ -10,6 +10,7 @@ import com.learningspringboot.service.CarService;
 import org.hibernate.mapping.Any;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,11 +98,17 @@ public class CarController {
   }
 
   /**
+   * The @PostMapping Method is one of Method considering critical because its
+   * make modification on the database, it necessary to use some ROLES to 
+   * make sure that the user that was REQUEST this Method has sure What is
+   * doing. In Spring-boot it uses @PreAuthorize to manage the ROLES.
+   * 
    * 
    * @param carPostRequestBody
    * @return
    */
   @PostMapping()
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Car> save(@RequestBody CarPostRequestBody carPostRequestBody){
     return new ResponseEntity<>( carService.save(carPostRequestBody), HttpStatus.CREATED);
   }
