@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -30,10 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   /**
    * all HttpRequest will be passed in this Method and will be available
    * in the basic authentication
+   * 
+   * the use of withHttpOnlyFalse() will force the Front-end has the same Cookie
+   * when it was perform the @PostRequest it shall pass the Cookie also.
    */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
+    http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+    .and()
+    .authorizeRequests()
     .anyRequest()
     .authenticated()
     .and()
