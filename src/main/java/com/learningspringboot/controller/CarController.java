@@ -7,6 +7,7 @@ import com.learningspringboot.requests.CarPostRequestBody;
 import com.learningspringboot.requests.CarPutRequestBody;
 import com.learningspringboot.service.CarService;
 
+import org.hibernate.mapping.Any;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -34,29 +36,92 @@ public class CarController {
 
   private final CarService carService;
 
+  /**
+   * 
+   * @return
+   */
   @GetMapping()
   public ResponseEntity<List<Car>> list(){
     log.info("The GetMapping is works!");
     return ResponseEntity.ok(carService.listAll()) ;
   }
 
+  /**
+   * this function find item by pass the ID
+   * @param id
+   * @return
+   */
   @GetMapping(path = "/{id}")
   public ResponseEntity<Car> findById(@PathVariable long id){
     log.info("The GetMapping is works!");
     return ResponseEntity.ok(carService.findByIdOrThrowBadRequestException(id)) ;
   }
 
+  /**
+   * this function find item by pass the name
+   * http://localhost:8080/cars/name?name=String
+   * @param name
+   * @return
+   */
+  @GetMapping(path = "/name")
+  public ResponseEntity<List<Car>> findByName(@RequestParam String name){
+    log.info("The GetMapping is works!");
+
+    return ResponseEntity.ok(carService.findByName(name)) ;
+  }
+  
+  /**
+   * this function find item by pass the color
+   * http://localhost:8080/cars/color?color=String
+   * @param color
+   * @return
+   */
+  @GetMapping(path = "/color")
+  public ResponseEntity<List<Car>> findByColor(@RequestParam String color){
+    log.info("The GetMapping is works!");
+
+    return ResponseEntity.ok(carService.findByColor(color)) ;
+  }
+
+  /**
+   * this function find item by pass the power
+   * http://localhost:8080/cars/power?power=Integer
+   * @param power
+   * @return
+   */
+  @GetMapping(path = "/power")
+  public ResponseEntity<List<Car>> findByPower(@RequestParam Integer power){
+    log.info("The GetMapping is works!");
+
+    return ResponseEntity.ok(carService.findByPower(power)) ;
+  }
+
+  /**
+   * 
+   * @param carPostRequestBody
+   * @return
+   */
   @PostMapping()
   public ResponseEntity<Car> save(@RequestBody CarPostRequestBody carPostRequestBody){
     return new ResponseEntity<>( carService.save(carPostRequestBody), HttpStatus.CREATED);
   }
 
+  /**
+   * 
+   * @param id
+   * @return
+   */
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<Car> delete(@PathVariable long id){
     carService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * 
+   * @param carPutRequestBody
+   * @return
+   */
   @PutMapping()
   public ResponseEntity<Car> replace(@RequestBody CarPutRequestBody carPutRequestBody){
     carService.replace(carPutRequestBody);

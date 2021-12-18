@@ -6,6 +6,8 @@ import lombok.Data;
 public class CarPostRequestBody {
   
   private String name;
+  private String color;
+  private Integer power;
 }
 
 /**

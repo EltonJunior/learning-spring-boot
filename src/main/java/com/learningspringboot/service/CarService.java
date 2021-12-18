@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.learningspringboot.domain.Car;
+import com.learningspringboot.exception.BadRequestException;
+import com.learningspringboot.mapper.CarMapper;
 import com.learningspringboot.repository.CarRepository;
 import com.learningspringboot.requests.CarPostRequestBody;
 import com.learningspringboot.requests.CarPutRequestBody;
@@ -63,6 +65,33 @@ public class CarService {
   }
 
   /**
+   * This function get the object by passed the name
+   * @param name
+   * @return
+   */
+  public List<Car> findByName(String name){
+    return carRepository.findByName(name);
+  }
+
+  /**
+   * This function get the object by passed the color
+   * @param color
+   * @return
+   */
+  public List<Car> findByColor(String color){
+    return carRepository.findByColor(color);
+  }
+
+  /**
+   * This function get the object by passed the power
+   * @param power
+   * @return
+   */
+  public List<Car> findByPower(Integer power){
+    return carRepository.findByPower(power);
+  }
+
+  /**
    * @apiNote the method findByIdOrThrowBadRequestException is used to search the element in the list,
    * as convection, every time when it is request a search and it has an error
    * it return a 404 NOT_FOUND, but in this return it doesn't have information
@@ -84,7 +113,7 @@ public class CarService {
    */ 
     return carRepository
       .findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car not found"));
+      .orElseThrow(() -> new BadRequestException("Car not found"));
   }
 
   /**
@@ -102,9 +131,12 @@ public class CarService {
     * 
     * now with the CarPostRequestBody as a DTO class, our method needs a mapping method, 
     * so, it was need inject the @Builder in the Car.java to construct the method
+    *
+    * This return will be refactored with the new method Mapper
+    * return carRepository.save(Car.builder().name(carPostRequestBody.getName()).build());
     */
 
-    return carRepository.save(Car.builder().name(carPostRequestBody.getName()).build());
+    return carRepository.save(CarMapper.INSTANCE.toCar(carPostRequestBody));
   }
 
   /**
@@ -124,14 +156,15 @@ public class CarService {
     /** 
      * delete(car.getId());
      * cars.add(car);
+     *
+     * This return will be refactored with the new method Mapper
+     * Car car = Car.builder().id(savedCar.getId()).name(carPutRequestBody.getName()).build();
      */
     
     Car savedCar = findByIdOrThrowBadRequestException(carPutRequestBody.getId());
-    Car car = Car.builder()
-    .id(savedCar.getId())
-    .name(carPutRequestBody.getName())
-    .build();
-
+    
+    Car car = CarMapper.INSTANCE.toCar(carPutRequestBody);
+    car.setId(savedCar.getId());
     carRepository.save(car);
     
   }

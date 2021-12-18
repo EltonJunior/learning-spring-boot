@@ -1,5 +1,7 @@
 package com.learningspringboot.repository;
 
+import java.util.List;
+
 import com.learningspringboot.domain.Car;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CarRepository extends JpaRepository<Car, Long>{
   
+  List<Car> findByName(String name);
+  List<Car> findByColor(String color);
+  List<Car> findByPower(Integer power);
 }
 
 
@@ -27,4 +32,6 @@ public interface CarRepository extends JpaRepository<Car, Long>{
  * 
  * One big advantage to use JpaRepository is it doesn't need to create any method.
  * All method that is needed should be find inside the JpaRepository 
+ * 
+ * When it created a functions findBy${param} the spring will take care of it.
  */
