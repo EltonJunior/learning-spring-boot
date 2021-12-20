@@ -80,6 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.csrf()
       .disable()//.disable() or .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())    
       .authorizeRequests()
+      .antMatchers("/cars/admin/**").hasRole("ADMIN")
+      .antMatchers("/cars/**").hasRole("USER")
       .anyRequest()
       .authenticated()
       .and()
@@ -117,4 +119,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  * protected void configure(AuthenticationManagerBuilder auth) throws Exception
  * with DATA get from DATABASE.
  * 
+ * When the application got to have a route patter, instead of use 
+ * @PreAuthorize("hasRole('ADMIN')") its can be use a route as a @PreAuthorize one,
+ * here in the SecurityConfig is possible to use .antMachers where it will pass the 
+ * ROUTE and the ROLE.
+ * e.g.  
+ * ...
+ * .authorizeRequests()
+ * .antMatchers("cars/admin/**").hasRole("ADMIN")
+ * .antMatchers("cars/**").hasRole("USER")
+ * ...
+ * 
+ * But be careful with se sequence it was put on if it was put inverted the ROLE was no
+ * working property.
+ * 
+ * After included this antMatchers, remove all @PreAuthorize("hasRole('ADMIN')").
  */

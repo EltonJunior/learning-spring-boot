@@ -124,7 +124,6 @@ public class CarController {
    * @return
    */
   @PostMapping()
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Car> save(@RequestBody CarPostRequestBody carPostRequestBody){
     return new ResponseEntity<>( carService.save(carPostRequestBody), HttpStatus.CREATED);
   }
@@ -134,7 +133,7 @@ public class CarController {
    * @param id
    * @return
    */
-  @DeleteMapping(path = "/{id}")
+  @DeleteMapping(path = "/admin/{id}")
   public ResponseEntity<Car> delete(@PathVariable long id){
     carService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
