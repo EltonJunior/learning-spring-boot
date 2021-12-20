@@ -11,6 +11,8 @@ import org.hibernate.mapping.Any;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +59,20 @@ public class CarController {
     log.info("The GetMapping is works!");
     return ResponseEntity.ok(carService.findByIdOrThrowBadRequestException(id)) ;
   }
+  /**
+   * this function find item by pass the ID
+   * this function also get the information of user on its REQUEST
+   * @param id
+   * @return
+   */
+  @GetMapping(path = "/by-id/{id}")
+  public ResponseEntity<Car> findByIdAuthenticationPrincipal(
+    @PathVariable long id,
+    @AuthenticationPrincipal UserDetails userDetails
+    ){
+      log.info(userDetails);
+      return ResponseEntity.ok(carService.findByIdOrThrowBadRequestException(id)) ;
+  }
 
   /**
    * this function find item by pass the name
@@ -66,7 +82,7 @@ public class CarController {
    */
   @GetMapping(path = "/name")
   public ResponseEntity<List<Car>> findByName(@RequestParam String name){
-    log.info("The GetMapping is works!");
+    log.info("The GetMapping by name is works!");
 
     return ResponseEntity.ok(carService.findByName(name)) ;
   }
@@ -79,7 +95,7 @@ public class CarController {
    */
   @GetMapping(path = "/color")
   public ResponseEntity<List<Car>> findByColor(@RequestParam String color){
-    log.info("The GetMapping is works!");
+    log.info("The GetMapping by color is works!");
 
     return ResponseEntity.ok(carService.findByColor(color)) ;
   }
@@ -92,7 +108,7 @@ public class CarController {
    */
   @GetMapping(path = "/power")
   public ResponseEntity<List<Car>> findByPower(@RequestParam Integer power){
-    log.info("The GetMapping is works!");
+    log.info("The GetMapping by power is works!");
 
     return ResponseEntity.ok(carService.findByPower(power)) ;
   }
