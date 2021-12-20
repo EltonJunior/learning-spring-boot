@@ -126,8 +126,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  * e.g.  
  * ...
  * .authorizeRequests()
- * .antMatchers("cars/admin/**").hasRole("ADMIN")
- * .antMatchers("cars/**").hasRole("USER")
+ * .antMatchers("/cars/admin/**").hasRole("ADMIN")
+ * .antMatchers("/cars/**").hasRole("USER")
  * ...
  * 
  * But be careful with se sequence it was put on if it was put inverted the ROLE was no

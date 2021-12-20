@@ -2,6 +2,8 @@ package com.learningspringboot.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.learningspringboot.domain.Car;
 import com.learningspringboot.requests.CarPostRequestBody;
 import com.learningspringboot.requests.CarPutRequestBody;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -119,12 +122,14 @@ public class CarController {
    * make sure that the user that was REQUEST this Method has sure What is
    * doing. In Spring-boot it uses @PreAuthorize to manage the ROLES.
    * 
+   * When it use the @NotEmpty and @NotNull in the function it need to add
+   * the directive @Valid, the spring will handle the exception automatic.
    * 
    * @param carPostRequestBody
    * @return
    */
   @PostMapping()
-  public ResponseEntity<Car> save(@RequestBody CarPostRequestBody carPostRequestBody){
+  public ResponseEntity<Car> save(@RequestBody @Valid CarPostRequestBody carPostRequestBody){
     return new ResponseEntity<>( carService.save(carPostRequestBody), HttpStatus.CREATED);
   }
 
@@ -194,5 +199,6 @@ public class CarController {
  * 
  * One analogic that it can be done is when it does a @PutMapping, it is change all interred 
  * object, it is used a function replace()
+ * 
  * 
  */

@@ -1,12 +1,20 @@
 package com.learningspringboot.requests;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 @Data
 public class CarPostRequestBody {
   
+  @NotEmpty(message = "The name cannot be Empty")
   private String name;
+
+  @NotEmpty(message = "The name color be Empty")
   private String color;
+
+  @NotNull(message = "The name power be Null")
   private Integer power;
 }
 
@@ -23,4 +31,11 @@ public class CarPostRequestBody {
  *  this way of using the application, helps to increase cohesion, of course, now it will
  *  need a class for each request, but it will help in a possible factorization
  *  of the code. 
+ * 
+ *  One thing is important to ensure is that the content on the variable is empty or null 
+ * before write on Database, for this the Spring boot has the Annotation  
+ * @NotEmpty(message = "The name power be Empty") or 
+ * @NotNull(message = "The name power be Null")
+ * where @NotEmpty is to String and @NotNull to Integer 
+ * instead of put in the Database those verification. 
  */

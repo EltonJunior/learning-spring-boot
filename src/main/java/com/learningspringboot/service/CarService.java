@@ -13,6 +13,7 @@ import com.learningspringboot.requests.CarPutRequestBody;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
@@ -120,9 +121,20 @@ public class CarService {
    * @apiNote to test the application, it was implemented the generate id, as database does.
    * car.setId(ThreadLocalRandom.current().nextLong(3,10000)); this function generated ids 
    * from 3 to 100000
+   * 
+   * one of important thing is to perform the ROLE BEAK TRANSACTION of its request, and the spring boot
+   * has one feature that is responsible to manage it, It's @Transactional. with this Feature Spring 
+   * won't commit the Transition while it has been finished
+   * 
+   * For this feature works property, the Engine of table Database shall be of type InnoDB
+   * 
+   * this function will handle the write on Database, because when its perform a POST and return any
+   * ERROR, it's expected the value not write in the database, but so far in it application, when 
+   * that behavior happens the value is write even if was wrong. 
    * @param car
    * @return return a create item.
    */
+  @Transactional
   public Car save(CarPostRequestBody carPostRequestBody) {
    /**
     * car.setId(ThreadLocalRandom.current().nextLong(3,10000));
@@ -134,9 +146,17 @@ public class CarService {
     *
     * This return will be refactored with the new method Mapper
     * return carRepository.save(Car.builder().name(carPostRequestBody.getName()).build());
+    * Car save = carRepository.save(CarMapper.INSTANCE.toCar(carPostRequestBody));
+    * if(true){
+    *   throw new RuntimeException("bad code");
+    * }else{
+    *   return save;
+    * }
+    *
     */
 
     return carRepository.save(CarMapper.INSTANCE.toCar(carPostRequestBody));
+
   }
 
   /**
