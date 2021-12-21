@@ -10,6 +10,8 @@ import com.learningspringboot.requests.CarPutRequestBody;
 import com.learningspringboot.service.CarService;
 
 import org.hibernate.mapping.Any;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,12 +46,31 @@ public class CarController {
 
   /**
    * 
+   * One feature very helpful in the spring is the pagination, to use it
+   * only need to create a method type Page and put the argument as Pageable
+   * 
+   * to search in the browser use http://localhost:8080/cars?size=5
+   * this will return only 5 element by page and if it wanna to go to next page
+   * 
+   * http://localhost:8080/cars?size=5&page=2
+   * 
+   * other function when the Pageable is included is the sort
+   * 
+   * http://localhost:8080/cars?size=10&sort=name,desc
+   * 
+   * this request will return the sort by name with descendent organization.
+   * 
+   * http://localhost:8080/cars?size=10&sort=name,asc
+   * 
+   * this request will return the sort by name with ascendent organization.
+   *  
+   * 
    * @return
    */
   @GetMapping()
-  public ResponseEntity<List<Car>> list(){
+  public ResponseEntity<Page<Car>> list(Pageable pageable){
     log.info("The GetMapping is works!");
-    return ResponseEntity.ok(carService.listAll()) ;
+    return ResponseEntity.ok(carService.listAll(pageable)) ;
   }
 
   /**

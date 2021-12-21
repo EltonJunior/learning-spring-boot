@@ -75,12 +75,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
     
   }
 
-  //Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request
+
 
   @Override
-  protected ResponseEntity<Object> handleExceptionInternal(
-    Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-      
+  protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+      HttpStatus status, WebRequest request) {
+   
       ExceptionDetails exceptionDetails = ExceptionDetails.builder()
           .timestamp(LocalDateTime.now())
           .status(status.value())
@@ -91,6 +91,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 
       return new ResponseEntity<>(exceptionDetails,headers,status);
     }
+
 }
 
 /**
